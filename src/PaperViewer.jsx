@@ -6,9 +6,8 @@ import "react-pdf/dist/esm/Page/TextLayer.css";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const PaperViewer = ({ url }) => {
-
   return (
-    <div className="overflow-auto w-full md:w-3/4  h-full flex justify-center">
+    <div className="overflow-auto w-full h-full flex justify-center">
       <Document
         file={url}
         loading={
@@ -21,7 +20,7 @@ const PaperViewer = ({ url }) => {
           pageNumber={1}
           renderTextLayer={false}
           renderAnnotationLayer={false}
-          scale={1.2} // Adjust this to fit better
+          scale={1.5}
           className="max-w-full"
         />
       </Document>

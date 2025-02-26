@@ -1,31 +1,27 @@
 import { useState, useEffect } from "react";
 import { PDFDownloadLink, pdf } from "@react-pdf/renderer";
-
+import { Button } from "./components/ui/button";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "./components/ui/select";
+import { Label } from "./components/ui/label";
 import { RoomPermission } from "./Documents/RoomPermission";
 import { Letter } from "./Documents/Letter";
 import { RoomPermissionForm } from "./Forms/RoomPermissionForm";
 import LetterForm from "./Forms/LetterForm";
 import PaperViewer from "./PaperViewer";
-
-import "./App.css";
-
-const Footer = () => (
-  <footer className="bg-gray-800 text-white text-center py-4 mt-8 w-full">
-    <p>
-      Made by{" "}
-      <a href="https://github.com/Witty-Wizard" className="text-blue-400">
-        Shashank Agarwal{" "}
-      </a>
-      ❤️
-    </p>
-  </footer>
-);
+import Footer from "./components/Footer";
+import Header from "./components/Header";
 
 const App = () => {
   const [formData, setFormData] = useState({});
   const [documentType, setDocumentType] = useState("RoomPermission");
   const [isMobile, setIsMobile] = useState(false);
-  const [pdfUrl, setPdfUrl] = useState(null); // State for generated PDF URL
+  const [pdfUrl, setPdfUrl] = useState(null);
   const [debounceTimer, setDebounceTimer] = useState(null);
 
   useEffect(() => {
@@ -34,12 +30,11 @@ const App = () => {
     };
 
     window.addEventListener("resize", handleResize);
-    handleResize(); // Check on initial load
+    handleResize();
 
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Debounce PDF rendering to avoid excessive re-renders
   useEffect(() => {
     if (debounceTimer) {
       clearTimeout(debounceTimer);
@@ -57,85 +52,99 @@ const App = () => {
       };
 
       generatePdfBlob();
-    }, 500); // Delay of 500ms
+    }, 500);
 
     setDebounceTimer(newTimer);
 
-    // Cleanup timeout if the component unmounts or formData changes
     return () => {
       clearTimeout(newTimer);
     };
   }, [formData, documentType]);
 
-  const handleDocumentTypeChange = (event) => {
-    setDocumentType(event.target.value);
-  };
-
   return (
-    <>
-      <div className="flex flex-col items-center justify-center bg-gray-100 min-h-screen">
-        <div className="items-center justify-center bg-white bg-opacity-50 p-8 rounded-lg shadow-lg border-2 border-black flex flex-col md:flex-row w-full my-6 max-w-[95%] ">
-          <div className="w-full md:w-1/2 flex flex-col items-center">
-            <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 w-full max-w-md mx-auto">
-              <div className="sm:col-span-10">
-                <label
-                  htmlFor="documentType"
-                  className="block text-sm font-medium text-gray-900"
-                >
-                  Select Document Type:
-                </label>
-                <div className="mt-2">
-                  <select
-                    id="documentType"
-                    value={documentType}
-                    onChange={handleDocumentTypeChange}
-                    className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-                  >
-                    <option value="">Select...</option>
-                    <option value="RoomPermission">Room Permission</option>
-                    <option value="Letter">Application Letter</option>
-                  </select>
-                </div>
-                <div className="w-full">
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      <Header />
+      <main className="flex-grow px-6 py-12 lg:px-12">
+        <div className="max-w-[1400px] mx-auto">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold mb-4">Welcome to Docify</h1>
+            <p className="text-xl text-muted-foreground">
+              Create documents with ease
+            </p>
+          </div>
+
+          <div className=" bg-white rounded-2xl shadow-lg border border-gray-200">
+            <div className="flex flex-col lg:flex-row min-h-[700px]">
+              {/* Form Section */}
+              <div className="lg:w-[400px] p-8 border-r border-gray-100">
+                <form className="space-y-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="documentType" className="text-gray-700">
+                      Select Document Type
+                    </Label>
+                    <Select
+                      onValueChange={setDocumentType}
+                      value={documentType}
+                    >
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select an option" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="RoomPermission">
+                          Room Permission
+                        </SelectItem>
+                        <SelectItem value="Letter">
+                          Application Letter
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
                   {documentType === "RoomPermission" ? (
                     <RoomPermissionForm onFormDataChange={setFormData} />
                   ) : (
                     <LetterForm onFormDataChange={setFormData} />
                   )}
+                </form>
+
+                <div className="mt-6 pt-6 border-t border-gray-100">
+                  <PDFDownloadLink
+                    document={
+                      documentType === "RoomPermission" ? (
+                        <RoomPermission formData={formData} />
+                      ) : (
+                        <Letter formData={formData} />
+                      )
+                    }
+                    fileName={`${documentType}.pdf`}
+                  >
+                    {({ loading }) => (
+                      <Button
+                        className="w-full transition-colors"
+                        disabled={loading}
+                      >
+                        {loading ? "Preparing Download..." : "Download PDF"}
+                      </Button>
+                    )}
+                  </PDFDownloadLink>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <div className="w-full md:w-1/2 pl-4 flex flex-col ">
-            {!isMobile && pdfUrl && (
-              <div className="flex-grow">
-                <PaperViewer url={pdfUrl} />
-              </div>
-            )}
-
-            <div className="mt-4 text-center">
-              <PDFDownloadLink
-                document={
-                  documentType === "RoomPermission" ? (
-                    <RoomPermission formData={formData} />
-                  ) : (
-                    <Letter formData={formData} />
-                  )
-                }
-                fileName={`${documentType}.pdf`}
-              >
-                <button className="p-2 bg-blue-500 text-white rounded">
-                  Download PDF
-                </button>
-              </PDFDownloadLink>
+              {/* PDF Viewer Section */}
+              {!isMobile && pdfUrl && (
+                <div className="flex-1 p-8 bg-gray-50 rounded-r-2xl">
+                  <div className="h-full">
+                    <PaperViewer url={pdfUrl} />
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
+      </main>
 
-        <Footer />
-      </div>
-    </>
+      <Footer />
+    </div>
   );
 };
 

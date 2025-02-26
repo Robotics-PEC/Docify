@@ -1,5 +1,10 @@
 import { useState } from "react";
+import { Button } from "../components/ui/button";
+import { Label } from "../components/ui/label";
+import { Input } from "../components/ui/input";
+import { Textarea } from "../components/ui/textarea";
 import { summarizeText } from "../utils/summarize";
+import { motion } from "framer-motion";
 
 export const RoomPermissionForm = ({ onFormDataChange }) => {
   const [formData, setFormData] = useState({
@@ -31,7 +36,6 @@ export const RoomPermissionForm = ({ onFormDataChange }) => {
       Department: ${formData.department}
       for the interested students of the college.
     `;
-
     try {
       const summary = await summarizeText(inputText);
       handleChange({ target: { name: "eventDescription", value: summary } });
@@ -40,63 +44,75 @@ export const RoomPermissionForm = ({ onFormDataChange }) => {
     }
   };
 
+  const formFields = [
+    { label: "Name of Society", name: "society", type: "text" },
+    { label: "Event Name", name: "eventName", type: "text" },
+    { label: "From Date", name: "fromDate", type: "date" },
+    { label: "To Date", name: "toDate", type: "date" },
+    { label: "From Time", name: "fromTime", type: "time" },
+    { label: "To Time", name: "toTime", type: "time" },
+    { label: "Room Number", name: "roomNumber", type: "text" },
+    { label: "Department", name: "department", type: "text" },
+    {
+      label: "Brief Event Description",
+      name: "eventDescription",
+      type: "textarea",
+    },
+  ];
+
   return (
-    <form className="space-y-6">
-      {[
-        { label: "Name of Society", name: "society", type: "text" },
-        { label: "Event Name", name: "eventName", type: "text" },
-        { label: "From Date", name: "fromDate", type: "date" },
-        { label: "To Date", name: "toDate", type: "date" },
-        { label: "From Time", name: "fromTime", type: "time" },
-        { label: "To Time", name: "toTime", type: "time" },
-        { label: "Room Number", name: "roomNumber", type: "text" },
-        { label: "Department", name: "department", type: "text" },
-        {
-          label: "Brief Event Description",
-          name: "eventDescription",
-          type: "textarea",
-        },
-      ].map((field) => (
-        <div
-          key={field.name}
-          className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 "
-        >
-          <div className="sm:col-span-4">
-            <label className="block text-sm font-medium text-gray-900 ">
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {formFields.map((field, index) => (
+          <motion.div
+            key={field.name}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className={`space-y-2 ${
+              field.type === "textarea" ? "md:col-span-2" : ""
+            }`}
+          >
+            <Label
+              htmlFor={field.name}
+              className="text-sm font-medium text-gray-700"
+            >
               {field.label}
-            </label>
-            <div className="mt-2">
-              {field.type === "textarea" ? (
-                <textarea
-                  id={field.name}
-                  name={field.name}
-                  rows="3"
-                  value={formData[field.name]}
-                  onChange={handleChange}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-                />
-              ) : (
-                <input
-                  id={field.name}
-                  name={field.name}
-                  type={field.type}
-                  value={formData[field.name]}
-                  onChange={handleChange}
-                  placeholder={field.placeholder || ""}
-                  className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2"
-                />
-              )}
-            </div>
-          </div>
-        </div>
-      ))}
-      <button
-        type="button"
-        onClick={handleSummarize}
-        className="p-2 bg-blue-500 text-white rounded"
+            </Label>
+            {field.type === "textarea" ? (
+              <Textarea
+                id={field.name}
+                name={field.name}
+                rows={4}
+                value={formData[field.name]}
+                onChange={handleChange}
+                className="w-full resize-none "
+                placeholder={`Enter ${field.label.toLowerCase()}...`}
+              />
+            ) : (
+              <Input
+                id={field.name}
+                name={field.name}
+                type={field.type}
+                value={formData[field.name]}
+                onChange={handleChange}
+                placeholder={`Enter ${field.label.toLowerCase()}...`}
+                className="w-full "
+              />
+            )}
+          </motion.div>
+        ))}
+      </div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.8 }}
+        className="flex justify-end pt-4"
       >
-        Generate Event Description
-      </button>
-    </form>
+        <Button onClick={handleSummarize} className="w-full transition-colors">
+          Generate Event Description
+        </Button>
+      </motion.div>
+    </div>
   );
 };
