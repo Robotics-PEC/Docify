@@ -1,10 +1,6 @@
-"use client";
-
-import Link from "next/link";
 import { Github, Instagram, Linkedin, Mail, MapPin, Clock, BookOpen, Users, Calendar, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
-const Footer = function() {
+const Footer = function () {
   return (
     <footer className="border-t bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
@@ -44,10 +40,10 @@ const Footer = function() {
                 { href: "/pyq", label: "Previous Year Questions" }
               ].map(({ href, label }) => (
                 <li key={href}>
-                  <Link href={href} className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
+                  <a href={href} className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
                     <ChevronRight className="h-4 w-4 mr-1" />
                     {label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -63,10 +59,10 @@ const Footer = function() {
                 { href: "/events", label: "Upcoming Events", icon: <Calendar className="h-4 w-4 mr-2" /> }
               ].map(({ href, label, icon }) => (
                 <li key={href}>
-                  <Link href={href} className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
+                  <a href={href} className="text-sm text-muted-foreground hover:text-foreground transition-colors flex items-center">
                     {icon}
                     {label}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -101,8 +97,8 @@ const Footer = function() {
               © {new Date().getFullYear()} PEC Robotics Society. All rights reserved.
             </p>
             <div className="mt-2 text-sm text-muted-foreground">
-              <Link href="/privacy" className="hover:text-foreground mr-4">Privacy Policy</Link>
-              <Link href="/terms" className="hover:text-foreground">Terms of Service</Link>
+              <a href="/privacy" className="hover:text-foreground mr-4">Privacy Policy</a>
+              <a href="/terms" className="hover:text-foreground">Terms of Service</a>
             </div>
           </div>
         </div>
