@@ -1,20 +1,25 @@
+"use client";
+
 import { useState } from "react";
+import Image from "next/image"; // Import Next.js Image component
 import { Button } from "@/components/ui/button";
 import { GitFork, Menu } from "lucide-react";
+import Link from "next/link";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleGithubClick = () => {
-    window.open("https://github.com/Robotics-PEC/Docify", "_blank");
+    window.open("https://github.com/Robotics-PEC", "_blank");
   };
 
   const navigation = [
     { name: "Home", path: "/" },
     { name: "Projects", path: "/projects" },
     { name: "Activities", path: "/activities" },
-    { name: "Contact", path: "/#contact" },
+    { name: "Events", path: "/events" },
+    { name: "Contact", path: "/contact" },
   ];
 
   return (
@@ -22,21 +27,33 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="h-16 flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <a href="/" className="text-xl font-bold">
-              PEC Robotics
-            </a>
+            {/* Logo */}
+            <Link href="/">
+              <Image
+                src="/logo.png" 
+                alt="PEC Robotics Logo"
+                width={120} 
+                height={40} 
+                className="object-contain"
+                priority 
+              />
+            </Link>
+
+            {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center gap-6">
               {navigation.map((item) => (
-                <a
+                <Link
                   key={item.name}
                   href={item.path}
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                 >
                   {item.name}
-                </a>
+                </Link>
               ))}
             </nav>
           </div>
+
+          {/* Buttons and Mobile Menu */}
           <div className="flex items-center gap-4">
             <Button
               variant="outline"
@@ -57,14 +74,14 @@ const Header = () => {
               <SheetContent>
                 <div className="flex flex-col gap-4 mt-8">
                   {navigation.map((item) => (
-                    <a
+                    <Link
                       key={item.name}
                       href={item.path}
                       className="text-lg font-medium px-4 py-2 hover:bg-accent rounded-md transition-colors"
                       onClick={() => setIsOpen(false)}
                     >
                       {item.name}
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </SheetContent>
