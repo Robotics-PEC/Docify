@@ -186,7 +186,7 @@ export const RoomPermission = ({ formData }) => {
 
           <View style={styles.signatureContainer}>
             <Text style={[styles.signature, styles.signatureLeft]}>
-              (PI Security)
+              (DSA)
             </Text>
           </View>
         </View>
