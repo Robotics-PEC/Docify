@@ -1,5 +1,6 @@
 import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
 import PECHeader from "./PECHeader";
+import { getBasePath } from "../utils/utils";
 
 export const RoomPermission = ({ formData }) => {
   const formatDate = (date) => {
@@ -99,7 +100,7 @@ export const RoomPermission = ({ formData }) => {
     <Document>
       <Page size="A4" style={styles.page}>
         <PECHeader rightLogo={{
-          logo:"/pec_seal.png",
+          logo:`${getBasePath()}pec_seal.png`,
           width: 60,
           height:60
         }}/>

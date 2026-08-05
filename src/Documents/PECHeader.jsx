@@ -1,4 +1,5 @@
 import { View, Text, Image, StyleSheet } from "@react-pdf/renderer";
+import { getBasePath } from "../utils/utils";
 
 const styles = StyleSheet.create({
   headerContainer: {
@@ -39,9 +40,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const getBasePath = () => {
-    return import.meta.env.BASE_URL || './';
-};
+
 
 export const PECHeader = ({
   middleText = "PUNJAB ENGINEERING COLLEGE\n(DEEMED TO BE UNIVERSITY)\nCHANDIGARH",
