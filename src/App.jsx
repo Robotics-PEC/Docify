@@ -16,6 +16,8 @@ import LetterForm from "./Forms/LetterForm";
 import PaperViewer from "./PaperViewer";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
+import {AuditoriumPermission} from "./Documents/AuditoriumPermission";
+import { AuditoriumPermissionForm } from "./Forms/AuditoriumPermissionForm";
 
 const App = () => {
   const [formData, setFormData] = useState({});
@@ -24,7 +26,21 @@ const App = () => {
   const [pdfUrl, setPdfUrl] = useState(null);
   const [debounceTimer, setDebounceTimer] = useState(null);
 
+  const changeDocumentType = (type) => {
+    sessionStorage.setItem("type", type);
+    setDocumentType(type);
+  }
+
   useEffect(() => {
+    
+    if(typeof window !== undefined) {
+      const type = sessionStorage.getItem("type");
+
+      if(type) {
+        setDocumentType(type);
+      }
+    }
+
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
@@ -43,7 +59,7 @@ const App = () => {
     const newTimer = setTimeout(async () => {
       const generatePdfBlob = async () => {
         const DocumentComponent =
-          documentType === "RoomPermission" ? RoomPermission : Letter;
+          documentType === "RoomPermission" ? RoomPermission : documentType === "Letter" ? Letter : AuditoriumPermission;
         const blob = await pdf(
           <DocumentComponent formData={formData} />
         ).toBlob();
@@ -60,6 +76,7 @@ const App = () => {
       clearTimeout(newTimer);
     };
   }, [formData, documentType]);
+
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -83,7 +100,7 @@ const App = () => {
                       Select Document Type
                     </Label>
                     <Select
-                      onValueChange={setDocumentType}
+                      onValueChange={changeDocumentType}
                       value={documentType}
                     >
                       <SelectTrigger className="w-full">
@@ -96,14 +113,19 @@ const App = () => {
                         <SelectItem value="Letter">
                           Application Letter
                         </SelectItem>
+                        <SelectItem value="AuditoriumPermission">
+                          Auditorium Permission
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
 
                   {documentType === "RoomPermission" ? (
                     <RoomPermissionForm onFormDataChange={setFormData} />
-                  ) : (
+                  ) : documentType === "Letter" ? (
                     <LetterForm onFormDataChange={setFormData} />
+                  ) : (
+                    <AuditoriumPermissionForm onFormDataChange={setFormData}/>
                   )}
                 </form>
 
@@ -112,8 +134,10 @@ const App = () => {
                     document={
                       documentType === "RoomPermission" ? (
                         <RoomPermission formData={formData} />
-                      ) : (
+                      ) : documentType === "Letter" ? (
                         <Letter formData={formData} />
+                      ) : (
+                        <AuditoriumPermission formData={formData}/>
                       )
                     }
                     fileName={`${documentType}.pdf`}
