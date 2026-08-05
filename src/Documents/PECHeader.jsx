@@ -39,30 +39,26 @@ const styles = StyleSheet.create({
   },
 });
 
-/**
- * Reusable Header Component for PDF
- * @param {Object} props
- * @param {string|string[]} props.middleText - Text for middle section (string or array of strings for multiple lines)
- * @param {string} props.leftLogo - Path to left logo (default: PEC logo)
- * @param {string} props.rightLogo - Path to right logo (default: seal logo)
- * @param {number} props.logoWidth - Width of logos (default: 80)
- */
+const getBasePath = () => {
+    return import.meta.env.BASE_URL || './';
+};
+
 export const PECHeader = ({
   middleText = "PUNJAB ENGINEERING COLLEGE\n(DEEMED TO BE UNIVERSITY)\nCHANDIGARH",
   leftLogo = {
-    logo: "/pec_logo.png",
+    logo: `${getBasePath()}pec_logo.jpg`,
     width: 60,
     height: 40
   },
   rightLogo = {
-    logo: "/pec_seal.png",
+    logo: `${getBasePath()}pec_seal.jpg`,
     width: 60,
     height: 60
   }
 }) => {
   // Handle both string and array input for middleText
   const textLines = Array.isArray(middleText) ? middleText : middleText.split("\n");
-
+  
   return (
     <View style={styles.headerContainer}>
       {/* Left Logo */}

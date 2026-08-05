@@ -3,8 +3,11 @@ import react from "@vitejs/plugin-react";
 import path from 'path';
 
 // https://vite.dev/config/
-export default defineConfig({
-  base: "/Docify/",
+export default defineConfig((command) => {
+  const isProduction = command === 'build';
+  
+  return {
+  base: isProduction ? "/Docify/" : "./", // ← Changes based on build vs dev
   plugins: [react()],
   server: {
     host: 'localhost',
@@ -24,4 +27,4 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   }
-});
+}});
