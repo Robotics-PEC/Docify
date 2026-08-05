@@ -58,6 +58,11 @@ export const RoomPermissionForm = ({ onFormDataChange }) => {
       name: "eventDescription",
       type: "textarea",
     },
+    {
+      label: "Expected participation & Audience:",
+      name: "audience",
+      type: "text"
+    }
   ];
 
   return (

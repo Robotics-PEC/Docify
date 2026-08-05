@@ -1,4 +1,5 @@
-import { Page, Text, View, Document, StyleSheet } from "@react-pdf/renderer";
+import { Page, Text, View, Document, StyleSheet, Image } from "@react-pdf/renderer";
+import PECHeader from "./PECHeader";
 
 export const RoomPermission = ({ formData }) => {
   const formatDate = (date) => {
@@ -30,6 +31,12 @@ export const RoomPermission = ({ formData }) => {
       fontSize: 20,
       fontFamily: "Times-Bold",
       textAlign: "center",
+    },
+    titleText: {
+      fontSize: 12,
+      fontFamily: "Times-Bold",
+      textDecoration: "underline",
+      lineHeight: 1.5,
     },
     section: {
       margin: 10,
@@ -68,9 +75,8 @@ export const RoomPermission = ({ formData }) => {
       borderBottomWidth: 0,
     },
     note: {
-      marginTop: 50,
-      fontFamily: "Times-Italic",
-      fontSize: 14,
+      marginTop: 20,
+      fontSize: 10,
     },
     signatureContainer: {
       flexDirection: "row",
@@ -92,25 +98,32 @@ export const RoomPermission = ({ formData }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <View>
-          <Text style={styles.Heading1}>
-            Punjab Engineering College (Deemed to be University) Chandigarh
-          </Text>
+        <PECHeader rightLogo={{
+          logo:"/pec_seal.png",
+          width: 60,
+          height:60
+        }}/>
+        <View style={{ margin: 10 }}></View>
+
+        <View style={{...styles.titleText, textAlign: "center", margin: 24}}>
+          <Text>Performa for Booking OF Lecture Rooms by Clubs/ Society/NSS/Sports & departments</Text>
         </View>
 
-        <View style={{ margin: 20 }}></View>
-
-        <View style={styles.Heading2}>
-          <Text>PERFORMA FOR BOOKING OF LECTURE ROOMS BY</Text>
-          <Text>CLUBS/SOCIETIES/NSS/NCC/SPORTS</Text>
-          <Text>& DEPARTMENTS</Text>
+        <View style={{margin: 10,paddingLeft: 10, ...styles.titleText}}>
+          <Text>
+            P/I Security 
+          </Text>
         </View>
 
         <View style={styles.section}>
           <View style={styles.table}>
             {[
-              { label: "Name of Society", value: formData.society },
+              { label: "Name of Club/Society", value: formData.society },
               { label: "Event Name", value: formData.eventName },
+              {
+                label: "Brief Event Description",
+                value: formData.eventDescription,
+              },
               {
                 label: "Date",
                 value: `${formatDate(formData.fromDate)} - ${formatDate(
@@ -125,10 +138,7 @@ export const RoomPermission = ({ formData }) => {
               },
               { label: "Room Number", value: formData.roomNumber },
               { label: "Department", value: formData.department },
-              {
-                label: "Brief Event Description",
-                value: formData.eventDescription,
-              },
+              { label: "Expected participation & Audience", value: formData.audience}
             ].map((row, index, array) => (
               <View
                 style={[
@@ -164,6 +174,12 @@ export const RoomPermission = ({ formData }) => {
               the institute’s property in the above-mentioned rooms during the
               specified time.
             </Text>
+            <Text style={{marginTop: 20}}> 
+              NOTE: Proper disciplined will be maintained during practices/activity by everyone and secretary/ joint secretary are responsible for it.
+            </Text>
+            <Text style={{marginTop: 20}}> 
+              Any financial assistance required? (Yes/No)
+            </Text>
           </View>
 
           <View style={styles.signatureContainer}>
@@ -182,9 +198,6 @@ export const RoomPermission = ({ formData }) => {
             <Text style={[styles.signature, styles.signatureRight]}>
               (ADSA)
             </Text>
-          </View>
-
-          <View style={styles.signatureContainer}>
             <Text style={[styles.signature, styles.signatureLeft]}>
               (DSA)
             </Text>

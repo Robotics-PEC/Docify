@@ -7,7 +7,14 @@ export default defineConfig({
   base: "./",
   plugins: [react()],
   server: {
+    host: 'localhost',
     port: 8000,
+    strictPort: false,
+    hmr: {
+      host: 'localhost',
+      port: 8000,
+      protocol: 'ws'
+    }
   },
   preview: {
     port: 8000,
