@@ -46,19 +46,19 @@ const getBasePath = () => {
 export const PECHeader = ({
   middleText = "PUNJAB ENGINEERING COLLEGE\n(DEEMED TO BE UNIVERSITY)\nCHANDIGARH",
   leftLogo = {
-    logo: `${getBasePath()}pec_logo.jpg`,
+    logo: `${getBasePath()}pec_logo.png`,
     width: 60,
     height: 40
   },
   rightLogo = {
-    logo: `${getBasePath()}pec_seal.jpg`,
+    logo: `${getBasePath()}pec_seal.png`,
     width: 60,
     height: 60
   }
 }) => {
   // Handle both string and array input for middleText
   const textLines = Array.isArray(middleText) ? middleText : middleText.split("\n");
-  
+  console.log({leftLogo, rightLogo});
   return (
     <View style={styles.headerContainer}>
       {/* Left Logo */}
