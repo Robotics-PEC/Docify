@@ -29,23 +29,23 @@ export const RoomPermissionForm = ({ onFormDataChange }) => {
     sessionStorage.setItem("type", "RoomPermission");
   };
 
-  const handleSummarize = async () => {
-    const inputText = `
-      Society: ${formData.society}
-      Event Name : ${formData.eventName}
-      on Date: ${formData.fromDate} to ${formData.toDate}
-      Timings of the event will be from : ${formData.fromTime} to ${formData.toTime}
-      Room Number: ${formData.roomNumber}
-      Department: ${formData.department}
-      for the interested students of the college.
-    `;
-    try {
-      const summary = await summarizeText(inputText);
-      handleChange({ target: { name: "eventDescription", value: summary } });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const handleSummarize = async () => {
+  //   const inputText = `
+  //     Society: ${formData.society}
+  //     Event Name : ${formData.eventName}
+  //     on Date: ${formData.fromDate} to ${formData.toDate}
+  //     Timings of the event will be from : ${formData.fromTime} to ${formData.toTime}
+  //     Room Number: ${formData.roomNumber}
+  //     Department: ${formData.department}
+  //     for the interested students of the college.
+  //   `;
+  //   try {
+  //     const summary = await summarizeText(inputText);
+  //     handleChange({ target: { name: "eventDescription", value: summary } });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const formFields = [
     { label: "Name of Society", name: "society", type: "text" },
@@ -64,13 +64,12 @@ export const RoomPermissionForm = ({ onFormDataChange }) => {
     {
       label: "Expected participation & Audience:",
       name: "audience",
-      type: "text"
+      type: "textarea"
     }
   ];
 
   useEffect(() => {
     const type = sessionStorage.getItem("type");
-
     if(type && type === "RoomPermission") {
       const form = sessionStorage.getItem("formData");
 
@@ -78,6 +77,7 @@ export const RoomPermissionForm = ({ onFormDataChange }) => {
         const parsed = JSON.parse(form);
 
         setFormData(parsed);
+        onFormDataChange(parsed);
       }
     }
   }, []);
@@ -125,16 +125,6 @@ export const RoomPermissionForm = ({ onFormDataChange }) => {
           </motion.div>
         ))}
       </div>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="flex justify-end pt-4"
-      >
-        <Button onClick={handleSummarize} className="w-full transition-colors">
-          Generate Event Description
-        </Button>
-      </motion.div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../components/ui/button";
 import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
@@ -27,7 +27,22 @@ const LetterForm = ({ onFormDataChange }) => {
     const updatedData = { ...formData, [name]: value };
     setFormData(updatedData);
     onFormDataChange(updatedData);
+
+    sessionStorage.setItem("formData", JSON.stringify(updatedData));
+    sessionStorage.setItem("type", "Letter");
   };
+
+  useEffect(() => {
+    const type = sessionStorage.getItem("type");
+    if (type && type === "Letter") {
+      const form = sessionStorage.getItem("formData");
+      if (form) {
+        const parsed = JSON.parse(form);
+        setFormData(parsed);
+        onFormDataChange(parsed);
+      }
+    }
+  }, []);
 
   const handleSummarize = async () => {
     const inputText = `

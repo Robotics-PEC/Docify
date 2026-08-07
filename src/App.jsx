@@ -26,6 +26,12 @@ const App = () => {
   const [pdfUrl, setPdfUrl] = useState(null);
   const [debounceTimer, setDebounceTimer] = useState(null);
 
+  const changeDocumentType = (type) => {
+    sessionStorage.clear();
+    setFormData({});
+    setDocumentType(type);
+  };
+
   useEffect(() => {
     
     if(typeof window !== undefined) {
@@ -95,7 +101,7 @@ const App = () => {
                       Select Document Type
                     </Label>
                     <Select
-                      onValueChange={setDocumentType}
+                      onValueChange={changeDocumentType}
                       value={documentType}
                     >
                       <SelectTrigger className="w-full">
