@@ -3,10 +3,18 @@ import PECHeader from "./PECHeader";
 import { getBasePath } from "../utils/utils";
 
 export const AuditoriumPermission = ({ formData }) => {
-  const formatDateTime = (date) => {
+  const formatDate = (date) => {
     if (!date) return "N/A";
-    const options = { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true };
-    return new Date(date).toLocaleDateString("en-GB", options).replace(/\b(am|pm)\b/i, (match) => match.toUpperCase());
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+    return new Date(date).toLocaleDateString("en-GB", options);
+  };
+
+  const formatTime = (time) => {
+    if (!time) return "N/A";
+    const [hours, minutes] = time.split(":");
+    const period = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12;
+    return `${formattedHours}:${minutes} ${period}`;
   };
 
   const styles = StyleSheet.create({
@@ -117,9 +125,7 @@ export const AuditoriumPermission = ({ formData }) => {
               { label: "Event Name", value: formData.eventName },
               {
                 label: "Date & Time",
-                value: `${formatDateTime(formData.fromDateTime)} - ${formatDateTime(
-                  formData.toDateTime
-                )}`,
+                value: `${formatDate(formData.fromDate)}${formData.toDate ? ` - ${formatDate(formData.toDate)}` : ""}, ${formatTime(formData.fromTime)} - ${formatTime(formData.toTime)}`,
               },
               {
                 label: "Brief Event Description",

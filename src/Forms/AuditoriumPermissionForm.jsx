@@ -10,8 +10,10 @@ export const AuditoriumPermissionForm = ({ onFormDataChange }) => {
   const [formData, setFormData] = useState({
     society: "",
     eventName: "",
-    fromDateTime: "",
-    toDateTime: "",
+    fromDate: "",
+    toDate: "",
+    fromTime: "",
+    toTime: "",
     eventDescription: "",
   });
 
@@ -47,8 +49,10 @@ export const AuditoriumPermissionForm = ({ onFormDataChange }) => {
   const formFields = [
     { label: "Name of Club/Tech. Society/NSS/NCC/Department/Others", name: "society", type: "textarea" },
     { label: "Event Name", name: "eventName", type: "textarea" },
-    { label: "From Date & Time", name: "fromDateTime", type: "datetime-local" },
-    { label: "To Date & Time", name: "toDateTime", type: "datetime-local" },
+    { label: "From Date", name: "fromDate", type: "date" },
+    { label: "To Date", name: "toDate", type: "date" },
+    { label: "From Time", name: "fromTime", type: "time" },
+    { label: "To Time", name: "toTime", type: "time" },
     {
       label: "Brief Event Description",
       name: "eventDescription",
