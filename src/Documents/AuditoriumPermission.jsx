@@ -3,18 +3,10 @@ import PECHeader from "./PECHeader";
 import { getBasePath } from "../utils/utils";
 
 export const AuditoriumPermission = ({ formData }) => {
-  const formatDate = (date) => {
+  const formatDateTime = (date) => {
     if (!date) return "N/A";
-    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
-    return new Date(date).toLocaleDateString("en-GB", options);
-  };
-
-  const formatTime = (time) => {
-    if (!time) return "N/A";
-    const [hours, minutes] = time.split(":");
-    const period = hours >= 12 ? "PM" : "AM";
-    const formattedHours = hours % 12 || 12;
-    return `${formattedHours}:${minutes} ${period}`;
+    const options = { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", hour12: true };
+    return new Date(date).toLocaleDateString("en-GB", options).replace(/\b(am|pm)\b/i, (match) => match.toUpperCase());
   };
 
   const styles = StyleSheet.create({
@@ -125,8 +117,8 @@ export const AuditoriumPermission = ({ formData }) => {
               { label: "Event Name", value: formData.eventName },
               {
                 label: "Date & Time",
-                value: `${formatDate(formData.fromDate)} - ${formatDate(
-                  formData.toDate
+                value: `${formatDateTime(formData.fromDateTime)} - ${formatDateTime(
+                  formData.toDateTime
                 )}`,
               },
               {
@@ -167,13 +159,22 @@ export const AuditoriumPermission = ({ formData }) => {
                 (Name & Signature of Secretary)
             </Text>
             <Text style={[styles.signature, styles.signatureRight]}>
-                (Name & Signature of CCS/CSTS)
+                (Name & Signature of Joint Secretary)
             </Text>
           </View>
 
           <View style={styles.signatureContainer}>
+            <Text style={[styles.signature, styles.signatureRight]}>
+                (Name & Signature of CCS/CSTS)
+            </Text>
             <Text style={[styles.signature, styles.signatureLeft]}>
                 (Signature of P/I)
+            </Text>
+          </View>
+
+          <View style={styles.signatureContainer}>
+            <Text style={[styles.signature, styles.signatureRight]}>
+                (Signature Head CDGC)
             </Text>
           </View>
 

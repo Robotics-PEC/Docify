@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../components/ui/button";
 import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
@@ -24,6 +24,9 @@ export const RoomPermissionForm = ({ onFormDataChange }) => {
     const updatedData = { ...formData, [name]: value };
     setFormData(updatedData);
     onFormDataChange(updatedData);
+
+    sessionStorage.setItem("formData", JSON.stringify(updatedData));
+    sessionStorage.setItem("type", "RoomPermission");
   };
 
   const handleSummarize = async () => {
@@ -64,6 +67,20 @@ export const RoomPermissionForm = ({ onFormDataChange }) => {
       type: "text"
     }
   ];
+
+  useEffect(() => {
+    const type = sessionStorage.getItem("type");
+
+    if(type && type === "RoomPermission") {
+      const form = sessionStorage.getItem("formData");
+
+      if(form) {
+        const parsed = JSON.parse(form);
+
+        setFormData(parsed);
+      }
+    }
+  }, []);
 
   return (
     <div className="space-y-6">

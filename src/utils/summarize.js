@@ -12,7 +12,7 @@ export const summarizeText = async (inputText) => {
     early_stopping: true,
   });
 
-  console.log(result);
+  console.log({result});
 
   if (result && result.length > 0) {
     return result[0].summary_text;

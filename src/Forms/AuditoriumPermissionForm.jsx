@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../components/ui/button";
 import { Label } from "../components/ui/label";
 import { Input } from "../components/ui/input";
@@ -10,7 +10,8 @@ export const AuditoriumPermissionForm = ({ onFormDataChange }) => {
   const [formData, setFormData] = useState({
     society: "",
     eventName: "",
-    dateTime: "",
+    fromDateTime: "",
+    toDateTime: "",
     eventDescription: "",
   });
 
@@ -19,34 +20,55 @@ export const AuditoriumPermissionForm = ({ onFormDataChange }) => {
     const updatedData = { ...formData, [name]: value };
     setFormData(updatedData);
     onFormDataChange(updatedData);
+
+    sessionStorage.setItem("formData", JSON.stringify(updatedData));
+    sessionStorage.setItem("type", "AuditoriumPermission");
   };
 
-  const handleSummarize = async () => {
-    const inputText = `
-      Society: ${formData.society}
-      Event Name : ${formData.eventName}
-      on Date: ${formData.fromDate} to ${formData.toDate}
-      Timings of the event will be from : ${formData.fromTime} to ${formData.toTime}
-      for the interested students of the college.
-    `;
-    try {
-      const summary = await summarizeText(inputText);
-      handleChange({ target: { name: "eventDescription", value: summary } });
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // const handleSummarize = async () => {
+  //   console.log("hi");
+  //   const inputText = `
+  //     Society: ${formData.society}
+  //     Event Name : ${formData.eventName}
+  //     Timings of the event will be from : ${formData.fromDateTime} to ${formData.toDateTime}
+  //     for the interested students of the college.
+  //   `;
+
+  //   console.log({inputText});
+  //   try {
+  //     const summary = await summarizeText(inputText);
+  //     console.log({summary});
+  //     // handleChange({ target: { name: "eventDescription", value: summary } });
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const formFields = [
     { label: "Name of Club/Tech. Society/NSS/NCC/Department/Others", name: "society", type: "textarea" },
-    { label: "Event Name", name: "eventName", type: "text" },
-    { label: "Date & Time", name: "dateTime", type: "time" },
+    { label: "Event Name", name: "eventName", type: "textarea" },
+    { label: "From Date & Time", name: "fromDateTime", type: "datetime-local" },
+    { label: "To Date & Time", name: "toDateTime", type: "datetime-local" },
     {
       label: "Brief Event Description",
       name: "eventDescription",
       type: "textarea",
     }
   ];
+
+  useEffect(() => {
+    const type = sessionStorage.getItem("type");
+
+    if(type && type === "AuditoriumPermission") {
+      const form = sessionStorage.getItem("formData");
+
+      if(form) {
+        const parsed = JSON.parse(form);
+        setFormData(parsed);
+        onFormDataChange(parsed);
+      }
+    }
+  }, []);
 
   return (
     <div className="space-y-6">
@@ -91,16 +113,6 @@ export const AuditoriumPermissionForm = ({ onFormDataChange }) => {
           </motion.div>
         ))}
       </div>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="flex justify-end pt-4"
-      >
-        <Button onClick={handleSummarize} className="w-full transition-colors">
-          Generate Event Description
-        </Button>
-      </motion.div>
     </div>
   );
 };

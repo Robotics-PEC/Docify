@@ -57,7 +57,6 @@ export const PECHeader = ({
 }) => {
   // Handle both string and array input for middleText
   const textLines = Array.isArray(middleText) ? middleText : middleText.split("\n");
-  console.log({leftLogo, rightLogo});
   return (
     <View style={styles.headerContainer}>
       {/* Left Logo */}
